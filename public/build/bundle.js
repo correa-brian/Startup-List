@@ -60,6 +60,10 @@
 	
 	var _StartupList2 = _interopRequireDefault(_StartupList);
 	
+	var _ProfileList = __webpack_require__(170);
+	
+	var _ProfileList2 = _interopRequireDefault(_ProfileList);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -85,7 +89,8 @@
 					'div',
 					null,
 					'Hello React!',
-					_react2.default.createElement(_StartupList2.default, null)
+					_react2.default.createElement(_StartupList2.default, null),
+					_react2.default.createElement(_ProfileList2.default, null)
 				);
 			}
 		}]);
@@ -20222,13 +20227,48 @@
 	
 			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StartupList).call(this, props, context));
 	
+			_this.addStartup = _this.addStartup.bind(_this);
+			_this.updateStartup = _this.updateStartup.bind(_this);
 			_this.state = {
-				startups: [{ name: 'investFeed', city: 'NYC' }, { name: 'Alphabet', city: 'SF' }, { name: 'Amazon', city: 'Seattle' }, { name: 'MakeSpace', city: 'NYC' }]
+	
+				startup: {
+					name: '',
+					location: ''
+				},
+	
+				startups: [{ name: 'investFeed', location: 'NYC' }, { name: 'Alphabet', location: 'SF' }, { name: 'Amazon', location: 'Seattle' }, { name: 'MakeSpace', location: 'NYC' }]
 			};
 			return _this;
 		}
 	
 		_createClass(StartupList, [{
+			key: 'addStartup',
+			value: function addStartup(event) {
+				event.preventDefault();
+				console.log('addStartup: ' + JSON.stringify(this.state.startup));
+	
+				var updatedStartups = Object.assign([], this.state.startups);
+				updatedStartups.push(this.state.startup);
+	
+				this.setState({
+					startups: updatedStartups
+				});
+			}
+		}, {
+			key: 'updateStartup',
+			value: function updateStartup(event) {
+				console.log('updateStartup: ' + event.target.id + ' == ' + event.target.value);
+	
+				//this.startup[event.target.id] = event.target.value // No! If done this way, other components don't hear about it
+	
+				var updatedStartup = Object.assign({}, this.state.startup);
+				updatedStartup[event.target.id] = event.target.value; // Yes
+	
+				this.setState({
+					startup: updatedStartup
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 	
@@ -20238,11 +20278,25 @@
 	
 				return _react2.default.createElement(
 					'div',
-					null,
+					{ className: 'list-box' },
 					_react2.default.createElement(
 						'ol',
 						null,
 						list
+					),
+					_react2.default.createElement(
+						'h2',
+						null,
+						'Add Startup '
+					),
+					_react2.default.createElement('input', { id: 'name', onChange: this.updateStartup, type: 'text', placeholder: 'Name' }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement('input', { id: 'location', onChange: this.updateStartup, type: 'text', placeholder: 'Location' }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(
+						'a',
+						{ onClick: this.addStartup, href: '#' },
+						'Add'
 					)
 				);
 			}
@@ -20280,19 +20334,53 @@
 	var ListItem = function (_Component) {
 		_inherits(ListItem, _Component);
 	
-		function ListItem() {
+		function ListItem(props, context) {
 			_classCallCheck(this, ListItem);
 	
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(ListItem).apply(this, arguments));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ListItem).call(this, props, context));
+	
+			_this.handleClick = _this.handleClick.bind(_this);
+			return _this;
 		}
 	
 		_createClass(ListItem, [{
+			key: 'handleClick',
+			value: function handleClick() {
+				console.log('handleClick');
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+	
+				var content = "";
+	
+				if (this.props.text.team == null && this.props.text.worth == null) {
+					var color = this.props.text.location == 'SF' ? 'red' : 'black';
+					content = _react2.default.createElement(
+						'span',
+						{ style: { color: color } },
+						this.props.text.name,
+						', ',
+						this.props.text.location
+					);
+				} else {
+					content = _react2.default.createElement(
+						'span',
+						null,
+						this.props.text.name,
+						', ',
+						this.props.text.team,
+						', ',
+						this.props.text.worth
+					);
+				}
+	
 				return _react2.default.createElement(
 					'li',
 					null,
-					this.props.text.name
+					' ',
+					content,
+					' '
 				);
 			}
 		}]);
@@ -20301,6 +20389,127 @@
 	}(_react.Component);
 	
 	exports.default = ListItem;
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _ListItem = __webpack_require__(169);
+	
+	var _ListItem2 = _interopRequireDefault(_ListItem);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var ProfileList = function (_Component) {
+		_inherits(ProfileList, _Component);
+	
+		function ProfileList(props, context) {
+			_classCallCheck(this, ProfileList);
+	
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ProfileList).call(this, props, context));
+	
+			_this.addProfile = _this.addProfile.bind(_this);
+			_this.updateProfile = _this.updateProfile.bind(_this);
+	
+			_this.state = {
+	
+				profile: {
+					name: '',
+					location: '',
+					worth: ''
+				},
+	
+				profiles: [{ name: 'Jose Conseco', team: 'California', worth: '$50' }, { name: 'Alex Rodriguez', team: 'New York', worth: '$50,000,000' }, { name: 'Barry Bonds', team: 'California', worth: '$90,000,000' }, { name: 'Ryan Braun', team: 'Wisconsin', worth: '$10,000,000' }]
+	
+			};
+	
+			return _this;
+		}
+	
+		_createClass(ProfileList, [{
+			key: 'addProfile',
+			value: function addProfile(event) {
+				event.preventDefault();
+				console.log('addProfile: ' + JSON.stringify(this.state.profile));
+	
+				var updatedProfiles = Object.assign([], this.state.profiles);
+				updatedProfiles.push(this.state.profile);
+	
+				this.setState({
+					profiles: updatedProfiles
+				});
+			}
+		}, {
+			key: 'updateProfile',
+			value: function updateProfile(event) {
+				console.log('updateProfile: ' + event.target.id + ' == ' + event.target.value);
+	
+				var updatedProfile = Object.assign({}, this.state.profile);
+				updatedProfile[event.target.id] = event.target.value;
+	
+				this.setState({
+					profile: updatedProfile
+				});
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+	
+				var list = this.state.profiles.map(function (profile, i) {
+					return _react2.default.createElement(_ListItem2.default, { key: i, text: profile });
+				});
+	
+				return _react2.default.createElement(
+					'div',
+					{ className: 'list-box' },
+					'Profile List',
+					_react2.default.createElement(
+						'ol',
+						null,
+						list
+					),
+					_react2.default.createElement(
+						'h2',
+						null,
+						' Add Profile '
+					),
+					_react2.default.createElement('input', { id: 'name', onChange: this.updateProfile, type: 'text', placeholder: 'Name' }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement('input', { id: 'location', onChange: this.updateProfile, type: 'text', placeholder: 'Team' }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement('input', { id: 'worth', onChange: this.updateProfile, type: 'text', placeholder: 'Worth' }),
+					_react2.default.createElement('br', null),
+					_react2.default.createElement(
+						'a',
+						{ onClick: this.addProfile, href: '#' },
+						'Add'
+					)
+				);
+			}
+		}]);
+	
+		return ProfileList;
+	}(_react.Component);
+	
+	exports.default = ProfileList;
 
 /***/ }
 /******/ ]);
